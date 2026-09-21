@@ -89,11 +89,13 @@ Cyclical time features (`hour_sin/cos`, `day_of_week_sin/cos`, `month_sin/cos`) 
 ```
 .
 ├── 01_exploration.ipynb      # EDA, feature engineering, modeling, evaluation
-└── api/
-    ├── main.py                # FastAPI service
-    ├── requirements.txt       # API-only dependencies (hand-written, not pip freeze)
-    ├── Dockerfile
-    └── model_24h.pkl          # Trained XGBoost model (24h-ahead)
+├── api/
+│   ├── main.py                # FastAPI service
+│   ├── requirements.txt       # API-only dependencies (hand-written, not pip freeze)
+│   ├── Dockerfile
+│   └── model_24h.pkl          # Trained XGBoost model (24h-ahead)
+└── month1-hello-world/        # Earlier learning exercise (Docker + FastAPI basics),
+                                # kept for history — not part of the forecasting project
 ```
 
 `requirements.txt` inside `api/` is deliberately minimal and hand-written — it is not generated via `pip freeze` from the exploration environment, which carries Jupyter and other research-only dependencies that have no place in the served API.
