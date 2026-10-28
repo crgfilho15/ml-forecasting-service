@@ -1,5 +1,7 @@
 # Energy Forecasting Service
 
+[![CI](https://github.com/crgfilho15/ml-forecasting-service/actions/workflows/ci.yml/badge.svg)](https://github.com/crgfilho15/ml-forecasting-service/actions/workflows/ci.yml)
+
 A 24-hour-ahead electricity consumption forecasting model, served as a containerized REST API. Built as a public, reproducible companion to my applied forecasting work at UTAD (Vine & Wine Portugal), using an open dataset since the original industrial telemetry is proprietary.
 
 ## Context
