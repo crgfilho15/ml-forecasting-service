@@ -1,6 +1,5 @@
-fastapi
-uvicorn
-joblib
-xgboost
-numpy
-pandas
+fastapi==0.162.0
+uvicorn==0.54.0
+joblib==1.6.0
+xgboost==3.4.1
+numpy==2.5.3
