@@ -93,14 +93,18 @@ Cyclical time features (`hour_sin/cos`, `day_of_week_sin/cos`, `month_sin/cos`) 
 ├── 01_exploration.ipynb      # EDA, feature engineering, modeling, evaluation
 ├── api/
 │   ├── main.py                # FastAPI service
-│   ├── requirements.txt       # API-only dependencies (hand-written, not pip freeze)
+│   ├── requirements.txt       # Production dependencies, pinned
+│   ├── requirements-dev.txt   # Production + test dependencies (pytest, httpx)
 │   ├── Dockerfile
 │   └── model_24h.pkl          # Trained XGBoost model (24h-ahead)
+├── tests/                     # pytest suite for /health and /predict
+├── pytest.ini
+├── .github/workflows/ci.yml   # CI: tests + Docker build
 └── month1-hello-world/        # Earlier learning exercise (Docker + FastAPI basics),
                                 # kept for history — not part of the forecasting project
 ```
 
-`requirements.txt` inside `api/` is deliberately minimal and hand-written — it is not generated via `pip freeze` from the exploration environment, which carries Jupyter and other research-only dependencies that have no place in the served API.
+`requirements.txt` inside `api/` is deliberately minimal and hand-written — it is not generated via `pip freeze` from the exploration environment, which carries Jupyter and other research-only dependencies that have no place in the served API. Versions are pinned (`xgboost` and `numpy` match the training environment) because the model is a pickle, which is tied to the library version that produced it. Test dependencies live in `requirements-dev.txt` and never enter the Docker image.
 
 ## How to Run
 
@@ -124,11 +128,21 @@ docker run --rm -p 8002:8002 energy-forecasting-api
 
 Then visit `http://127.0.0.1:8002/docs` for interactive API documentation, or `http://127.0.0.1:8002/health` for a liveness check.
 
+**Tests** (from the repository root):
+
+```bash
+pip install -r api/requirements-dev.txt
+pytest
+```
+
+The suite uses the real model and covers `/health`, a valid `/predict` request, and the 422 responses for missing fields, wrong types and non-positive values. GitHub Actions runs the same tests on every push, and also builds the Docker image and checks that the container answers on `/health`.
+
 ## Tech Stack
 
 * **Data & Modeling**: Python, Pandas, NumPy, XGBoost, scikit-learn (metrics)
 * **API**: FastAPI, Pydantic, Uvicorn
 * **Serving**: Docker
+* **Testing & CI**: pytest, GitHub Actions
 * **Research environment**: Jupyter Notebook
 * **Model persistence**: joblib
 
