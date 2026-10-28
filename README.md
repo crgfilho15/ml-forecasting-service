@@ -104,7 +104,7 @@ Cyclical time features (`hour_sin/cos`, `day_of_week_sin/cos`, `month_sin/cos`) 
                                 # kept for history — not part of the forecasting project
 ```
 
-`requirements.txt` inside `api/` is deliberately minimal and hand-written — it is not generated via `pip freeze` from the exploration environment, which carries Jupyter and other research-only dependencies that have no place in the served API. Versions are pinned (`xgboost` and `numpy` match the training environment) because the model is a pickle, which is tied to the library version that produced it. Test dependencies live in `requirements-dev.txt` and never enter the Docker image.
+`requirements.txt` inside `api/` is deliberately minimal and hand-written — it is not generated via `pip freeze` from the exploration environment, which carries Jupyter and other research-only dependencies that have no place in the served API. Versions are pinned (`xgboost` and `numpy` match the training environment) because the model is a pickle, which is tied to the library version that produced it. The CPU-only `xgboost-cpu` package is used instead of `xgboost` because the standard Linux wheel pulls in GPU libraries (about 345 MB) that a CPU deployment never uses; this cut the Docker image from 1.32 GB to 535 MB. It provides the same `xgboost` module, but has no macOS wheels. Test dependencies live in `requirements-dev.txt` and never enter the Docker image.
 
 ## How to Run
 
