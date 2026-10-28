@@ -3,10 +3,12 @@ import joblib
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from datetime import datetime
+from pathlib import Path
 
 app = FastAPI(title="Energy Forecasting API")
 
-model = joblib.load("model_24h.pkl")
+MODEL_PATH = Path(__file__).parent / "model_24h.pkl"
+model = joblib.load(MODEL_PATH)
 
 
 class ForecastRequest(BaseModel):
